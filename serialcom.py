@@ -9,8 +9,8 @@ class SerialCommander:
 
     def connect(self):
         try:
-            self.serial_connection = serial.Serial(self.port, self.baud_rate)
-            print(f"Connected to {self.port} at {self.baud_rate} baud rate.")
+            self.serial_connection = serial.Serial(self.port, self.baud_rate, timeout=2)
+            print(f"super Connected to {self.port} at {self.baud_rate} baud rate.")
         except serial.SerialException as e:
             print(f"Error: {e}")
 
@@ -23,7 +23,7 @@ class SerialCommander:
         if self.serial_connection:
             try:
                 self.serial_connection.write((command + "\n").encode())
-                print(f"Sent command: {command}")
+            #    print(f"Sent command: {command}")
             except serial.SerialException as e:
                 print(f"Error sending command: {e}")
                 
@@ -32,7 +32,7 @@ class SerialCommander:
         if self.serial_connection:
             try:
                 response = self.serial_connection.readline().decode().strip()
-                print(f"Received response: {response}")
+            #    print(f"Received response: {response}")
             except serial.SerialException as e:
                 print(f"Error reading response: {e}")
         return response

@@ -2,27 +2,36 @@ import serial
 from serialcom import SerialCommander
 import time
 
-class GeneratorObj(SerialCommander):
+
+inPrompts = {'getAll': ["Kilowatt capacity: ", "Current KW level: ", "Load allocated: ", \
+                        "Difference between allocated and used KW: ", "Carbon value: ",  \
+                        "Renewability: ", "Current Power: "] ,
+           'getLoads': ["h1 load: ", "h2 load: ", "h3 load: ", "h4 load: "],
+            'getLoadVal':  ["Combined load: "] ,
+             'getKW':         ["KW: "],
+              'getCarbon': ["Carbon emission in ton: "]}
+
+class Generator(SerialCommander):
     def __init__(self, COM, SP):
         self.cmdMenu = {}
         self.cmds = {}
         self.port = COM
         self.baud_rate = SP
-        super(GeneratorObj, self).connect()
+        super(Generator, self).connect()
         time.sleep(2)
         self.set_up_cmds()
 
     def set_up_cmds(self):
-        print("sdfds")
+
         #self.send_command("getCommands")
         #cmd_name = self.read_response()
 
-        super(GeneratorObj, self).send_command("getCommands")
-        cmd_name = super(GeneratorObj, self).read_response()
+        super(Generator, self).send_command("getCommands")
+        cmd_name = super(Generator, self).read_response()
         
         while cmd_name != "eoc":
-            super(GeneratorObj, self).send_command(cmd_name)
-            cmd_name = super(GeneratorObj, self).read_response()
+            super(Generator, self).send_command(cmd_name)
+            cmd_name = super(Generator, self).read_response()
             print(cmd_name)
             num_of_output = 0
             num_of_input = 0
@@ -99,10 +108,11 @@ class GeneratorObj(SerialCommander):
         count = self.cmds[cmd_name].in_arg
         self.send_command(cmd_name)
         time.sleep(0.1)  # Wait for response to be received
-
+        cnt=0
         for _ in range(count):
-            response = self.read_sp()
-            print(response)
+            response = self.read_response()
+            print(inPrompts[cmd_name][cnt], response)
+            cnt=cnt+1
 
 class Cmd:
     def __init__(self, name, in_arg, out_arg):
