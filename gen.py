@@ -8,17 +8,26 @@ class GeneratorObj(SerialCommander):
         self.cmds = {}
         self.port = COM
         self.baud_rate = SP
-        self.serial_connection = self.connect()
+        super(GeneratorObj, self).connect()
         time.sleep(2)
         self.set_up_cmds()
 
     def set_up_cmds(self):
-        self.send_command("getCommands")
-        cmd_name = self.read_sp()
+        print("sdfds")
+        #self.send_command("getCommands")
+        #cmd_name = self.read_response()
+
+        super(GeneratorObj, self).send_command("getCommands")
+        cmd_name = super(GeneratorObj, self).read_response()
+        
         while cmd_name != "eoc":
+            super(GeneratorObj, self).send_command(cmd_name)
+            cmd_name = super(GeneratorObj, self).read_response()
+            print(cmd_name)
             num_of_output = 0
             num_of_input = 0
-            special_index = -1  # Index of the first special char: ">" means cmd needs input, "<" means cmd has output
+            special_index = -1  
+            # Index of the first special char: ">" means cmd needs input, "<" means cmd has output
 
             if ">" in cmd_name:
                 special_index = cmd_name.index(">")
@@ -31,23 +40,8 @@ class GeneratorObj(SerialCommander):
                 cmd_name = cmd_name[:special_index]
 
             curr_cmd = Cmd(cmd_name, num_of_input, num_of_output)
-            self.cmds[cmd_name] = curr_cmd
-            cmd_name = self.read_sp()
-
-    def read_sp(self):
-        try:
-            str_value = self.serial_connection.readline().decode().strip()
-        except Exception as e:
-            print("***error")
-            str_value = f"ERROR: Can't read from {self.port}: {str(e)}"
-        return str_value
-
-    def send_command(self, command):
-        if self.serial_connection:
-            try:
-                self.serial_connection.write((command + "\n").encode())
-            except Exception as e:
-                print(f"Error sending command '{command}': {str(e)}")
+            self.cmds[cmd_name] = curr_cmd         
+          
 
     def call(self, cmd_name):
         if cmd_name not in self.cmds:
@@ -116,9 +110,9 @@ class Cmd:
         self.in_arg = in_arg
         self.out_arg = out_arg
 
-generator = GeneratorObj("/dev/cu.usbserial-110", 9600)
+#generator = GeneratorObj("/dev/cu.usbserial-110", 9600)
 #generator.setup()  # Replace with your COM port and baud rate
-generator.call("init")
-generator.call("runRange")
+#generator.call("init")
+#generator.call("runRange")
 # Call other commands as needed
-generator.call("off")  # For example, turning off the generator
+#generator.call("off")  # For example, turning off the generator
