@@ -53,7 +53,7 @@ class SolarTracker(SerialCommander):
             self.cmds[cmd_name] = curr_cmd         
           
 
-    def call(self, cmd_name):
+    def call(self, cmd_name, returnValue=False):
         if cmd_name not in self.cmds:
             print(f"ERROR: '{cmd_name}' is not in cmd menu")
             return
@@ -63,7 +63,7 @@ class SolarTracker(SerialCommander):
         if curr_cmd.in_arg == 0 and curr_cmd.out_arg == 0:
             self.send_command(cmd_name)
         elif curr_cmd.in_arg != 0:
-            self.read_cmd_message(cmd_name)
+            return self.read_cmd_message(cmd_name, returnValue)
         elif cmd_name == "setLoad":
             self.set_load()
         elif cmd_name == "setVolts":
@@ -101,7 +101,7 @@ class SolarTracker(SerialCommander):
         load_val = input("loadVal: ")
         self.send_command(f"setLoad\n{load_val}")
 
-    def read_cmd_message(self, cmd_name):
+    def read_cmd_message(self, cmd_name, returnValue):
         if cmd_name not in self.cmds:
             print(f"ERROR: '{cmd_name}' is not in cmd menu")
             return
@@ -110,10 +110,14 @@ class SolarTracker(SerialCommander):
         self.send_command(cmd_name)
         time.sleep(0.1)  # Wait for response to be received
         cnt=0
+        data = []
         for _ in range(count):
             response = self.read_response()
-            print(inPrompts[cmd_name][cnt], response)
+            if (returnValue):
+                print(inPrompts[cmd_name][cnt], response)
             cnt=cnt+1
+            data.append(response)
+        return data
 
 class Cmd:
     def __init__(self, name, in_arg, out_arg):
