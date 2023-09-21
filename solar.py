@@ -22,6 +22,9 @@ class SolarTracker(SerialCommander):
         time.sleep(2)
         self.set_up_cmds()
 
+    def disconnect(self):
+      super(SolarTracker, self).disconnect()
+
     def set_up_cmds(self):
 
         #self.send_command("getCommands")
