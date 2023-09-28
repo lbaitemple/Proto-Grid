@@ -1,5 +1,5 @@
 import serial
-from serialcom import SerialCommander
+from .serialcom import SerialCommander
 import time
 
 
@@ -112,7 +112,7 @@ class Generator(SerialCommander):
         data=[]
         for _ in range(count):
             response = self.read_response()
-            if (returnValue=False):
+            if (returnValue==False):
               print(inPrompts[cmd_name][cnt], response)
             data[cnt]=response
             cnt=cnt+1
