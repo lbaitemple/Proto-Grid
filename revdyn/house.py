@@ -11,13 +11,13 @@ inPrompts = {'getAll': ["Kilowatt capacity: ", "Current KW level: ", "Load alloc
              'getKW':         ["KW: "],
               'getCarbon': ["Carbon emission in ton: "]}
 
-class House(SerialCommander):
+class houseload(SerialCommander):
     def __init__(self, COM, SP):
         self.cmdMenu = {}
         self.cmds = {}
         self.port = COM
         self.baud_rate = SP
-        super(House, self).connect()
+        super(houseload, self).connect()
         time.sleep(2)
         self.set_up_cmds()
 
@@ -26,12 +26,12 @@ class House(SerialCommander):
         #self.send_command("getCommands")
         #cmd_name = self.read_response()
 
-        super(House, self).send_command("getCommands")
-        cmd_name = super(House, self).read_response()
+        super(houseload, self).send_command("getCommands")
+        cmd_name = super(houseload, self).read_response()
         
         while cmd_name != "eoc":
-            super(House, self).send_command(cmd_name)
-            cmd_name = super(House, self).read_response()
+            super(houseload, self).send_command(cmd_name)
+            cmd_name = super(houseload, self).read_response()
             print(cmd_name)
             num_of_output = 0
             num_of_input = 0

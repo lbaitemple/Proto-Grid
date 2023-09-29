@@ -21,6 +21,7 @@ class AllDevice:
         time.sleep(2)
         serial_commander.send_command("*ID?")
         response = serial_commander.read_response()
+        print(response)
 
         self.devices[response]=Device(response, port=m, spd=9600)            
 
@@ -30,11 +31,14 @@ class AllDevice:
 
 
 class Device:
-   def __init__(self, name, port, spd=9600):
+  def __init__(self, name, port, spd=9600):
       self.port = port
       self.name = name
 
       mod = __import__('.revdyn', fromlist=[name])
       klass = getattr(mod, name)
-      klass(port, spd)
+      self.device=klass(port, spd)
+
+  def getDevice(self):
+     return self.device
 

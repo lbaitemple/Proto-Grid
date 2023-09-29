@@ -12,13 +12,13 @@ inPrompts = {'getAll': ["Kilowatt capacity: ", "Current KW level: ", "Load alloc
               'getmax':  ["Wind turbine position with max wind speed: "], \
               'getPos':    ["Current wind turbine position: "]}
 
-class WindTurbine(SerialCommander):
+class windturbine(SerialCommander):
     def __init__(self, COM, SP):
         self.cmdMenu = {}
         self.cmds = {}
         self.port = COM
         self.baud_rate = SP
-        super(WindTurbine, self).connect()
+        super(windturbine, self).connect()
         time.sleep(2)
         self.set_up_cmds()
 
@@ -27,12 +27,12 @@ class WindTurbine(SerialCommander):
         #self.send_command("getCommands")
         #cmd_name = self.read_response()
 
-        super(WindTurbine, self).send_command("getCommands")
-        cmd_name = super(WindTurbine, self).read_response()
+        super(windturbine, self).send_command("getCommands")
+        cmd_name = super(windturbine, self).read_response()
         
         while cmd_name != "eoc":
-            super(WindTurbine, self).send_command(cmd_name)
-            cmd_name = super(WindTurbine, self).read_response()
+            super(windturbine, self).send_command(cmd_name)
+            cmd_name = super(windturbine, self).read_response()
             print(cmd_name)
             num_of_output = 0
             num_of_input = 0

@@ -12,30 +12,30 @@ inPrompts = {'getAll': ["Kilowatt capacity: ", "Current KW level: ", "Load alloc
                'getmax':  ["Panel position with max light level: "], \
                 'getPos': ["Current solar panel position: "] }
 
-class SolarTracker(SerialCommander):
+class solartracker(SerialCommander):
     def __init__(self, COM, SP):
         self.cmdMenu = {}
         self.cmds = {}
         self.port = COM
         self.baud_rate = SP
-        super(SolarTracker, self).connect()
+        super(solartracker, self).connect()
         time.sleep(2)
         self.set_up_cmds()
 
     def disconnect(self):
-      super(SolarTracker, self).disconnect()
+      super(solartracker, self).disconnect()
 
     def set_up_cmds(self):
 
         #self.send_command("getCommands")
         #cmd_name = self.read_response()
 
-        super(SolarTracker, self).send_command("getCommands")
-        cmd_name = super(SolarTracker, self).read_response()
+        super(solartracker, self).send_command("getCommands")
+        cmd_name = super(solartracker, self).read_response()
         
         while cmd_name != "eoc":
-            super(SolarTracker, self).send_command(cmd_name)
-            cmd_name = super(SolarTracker, self).read_response()
+            super(solartracker, self).send_command(cmd_name)
+            cmd_name = super(solartracker, self).read_response()
             print(cmd_name)
             num_of_output = 0
             num_of_input = 0
