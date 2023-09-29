@@ -1,6 +1,7 @@
 
 from serial.tools import list_ports
-import re
+from .serialcom import SerialCommander
+import re, time
 
 
 class AllDevice:
@@ -10,8 +11,6 @@ class AllDevice:
     enmu_ports = enumerate(list_ports.comports())
     port = []
     for n, (p, descriptor, hid) in enmu_ports:
-    #print(p, descriptor, hid)
-    #print(p)
       if re.findall(r"Ser", descriptor):
           print(p)
           port.append(p)
@@ -23,5 +22,19 @@ class AllDevice:
         serial_commander.send_command("*ID?")
         response = serial_commander.read_response()
 
-        if (response == "houseload"):
-            self.devices.append("household")
+        self.devices[response]=Device(response, port=m, spd=9600)            
+
+  def getAllDevice(self):
+    return self.devices
+       
+
+
+class Device:
+   def __init__(self, name, port, spd=9600):
+      self.port = port
+      self.name = name
+
+      mod = __import__('.revdyn', fromlist=[name])
+      klass = getattr(mod, name)
+      klass(port, spd)
+
