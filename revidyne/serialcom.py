@@ -10,7 +10,7 @@ class SerialCommander:
     def connect(self):
         try:
             self.serial_connection = serial.Serial(self.port, self.baud_rate, timeout=2)
-           # print(f"super Connected to {self.port} at {self.baud_rate} baud rate.")
+            print(f"super Connected to {self.port} at {self.baud_rate} baud rate.")
         except serial.SerialException as e:
             print(f"Error: {e}")
 

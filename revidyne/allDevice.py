@@ -35,7 +35,7 @@ class Device:
       self.port = port
       self.name = name
 
-      mod = __import__('.revidyne', fromlist=[name])
+      mod = __import__('.revdyn', fromlist=[name])
       klass = getattr(mod, name)
       self.device=klass(port, spd)
 
