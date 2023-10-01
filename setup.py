@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(
-    name='revdyn',
+    name='revidyne',
     version='0.0.1',
     packages=['revidyne'],
     url='',
