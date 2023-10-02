@@ -62,42 +62,13 @@ class fan(SerialCommander):
             self.send_command(cmd_name)
         elif curr_cmd.in_arg != 0:
             self.read_cmd_message(cmd_name)
-        elif cmd_name == "setLoad":
-            self.set_load()
-        elif cmd_name == "setVolts":
-            self.set_volts()
-        elif cmd_name == "setMot":
-            self.set_mot()
-        elif cmd_name == "setKp":
-            self.set_kp()
-        elif cmd_name == "setKi":
-            self.set_ki()
-        elif cmd_name == "setKd":
-            self.set_kd()
+        elif cmd_name == "setSpeed":
+            self.setSpeed()
 
-    def set_kd(self):
-        kd = input("Kd: ")
-        self.send_command(f"setKd\n{kd}")
 
-    def set_ki(self):
-        ki = input("Ki: ")
-        self.send_command(f"setKi\n{ki}")
+    def setSpeed(self, spd=0):
+        self.send_command(f"setSpeed\n{spd}")
 
-    def set_kp(self):
-        kp = input("Kp: ")
-        self.send_command(f"setKp\n{kp}")
-
-    def set_mot(self):
-        mot_pct = input("motPct: ")
-        self.send_command(f"setMot\n{mot_pct}")
-
-    def set_volts(self):
-        set_v = input("setV: ")
-        self.send_command(f"setVolts\n{set_v}")
-
-    def set_load(self):
-        load_val = input("loadVal: ")
-        self.send_command(f"setLoad\n{load_val}")
 
     def read_cmd_message(self, cmd_name):
         if cmd_name not in self.cmds:

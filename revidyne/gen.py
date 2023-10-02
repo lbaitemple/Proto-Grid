@@ -76,28 +76,22 @@ class generator(SerialCommander):
         elif cmd_name == "setKd":
             self.set_kd()
 
-    def set_kd(self):
-        kd = input("Kd: ")
+    def setKd(self, Kd):
         self.send_command(f"setKd\n{kd}")
 
-    def set_ki(self):
-        ki = input("Ki: ")
+    def setKi(self, Ki):
         self.send_command(f"setKi\n{ki}")
 
-    def set_kp(self):
-        kp = input("Kp: ")
+    def setKp(self, Kp):
         self.send_command(f"setKp\n{kp}")
 
-    def set_mot(self):
-        mot_pct = input("motPct: ")
+    def setMot(self, mot_pct):
         self.send_command(f"setMot\n{mot_pct}")
 
-    def set_volts(self):
-        set_v = input("setV: ")
+    def setVolts(self, set_v):
         self.send_command(f"setVolts\n{set_v}")
 
-    def set_load(self):
-        load_val = input("loadVal: ")
+    def setLoad(self, load_val):
         self.send_command(f"setLoad\n{load_val}")
 
     def read_cmd_message(self, cmd_name, returnValue=False):
@@ -113,7 +107,7 @@ class generator(SerialCommander):
         for _ in range(count):
             response = self.read_response()
             if (returnValue==False):
-              print(inPrompts[cmd_name][cnt], response)
+                print(inPrompts[cmd_name][cnt], response)
             data[cnt]=response
             cnt=cnt+1
         return data

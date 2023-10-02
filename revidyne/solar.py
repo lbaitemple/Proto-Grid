@@ -80,30 +80,20 @@ class solartracker(SerialCommander):
         elif cmd_name == "setKd":
             self.set_kd()
 
-    def set_kd(self):
-        kd = input("Kd: ")
-        self.send_command(f"setKd\n{kd}")
+            
+    def moveCW(self, deg):
+        self.send_command(f"moveCW\n{deg}")
+        
+    def moveCCW(self, deg):
+        self.send_command(f"moveCCW\n{deg}")
 
-    def set_ki(self):
-        ki = input("Ki: ")
-        self.send_command(f"setKi\n{ki}")
-
-    def set_kp(self):
-        kp = input("Kp: ")
-        self.send_command(f"setKp\n{kp}")
-
-    def set_mot(self):
-        mot_pct = input("motPct: ")
-        self.send_command(f"setMot\n{mot_pct}")
-
-    def set_volts(self):
-        set_v = input("setV: ")
-        self.send_command(f"setVolts\n{set_v}")
-
-    def set_load(self):
-        load_val = input("loadVal: ")
-        self.send_command(f"setLoad\n{load_val}")
-
+    def setLoad(self, ld):
+        self.send_command(f"moveCCW\n{ld}")
+        
+        
+    def setSteps(self, stp):
+        self.send_command(f"setSteps\n{stp}")
+        
     def read_cmd_message(self, cmd_name, returnValue):
         if cmd_name not in self.cmds:
             print(f"ERROR: '{cmd_name}' is not in cmd menu")

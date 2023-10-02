@@ -76,29 +76,9 @@ class houseload(SerialCommander):
         elif cmd_name == "setKd":
             self.set_kd()
 
-    def set_kd(self):
-        kd = input("Kd: ")
-        self.send_command(f"setKd\n{kd}")
+    def setLimits(self, a,b,c,d):
+        self.send_command(f"setLimits\n{a}\n{b}\n{c}\n{d}")
 
-    def set_ki(self):
-        ki = input("Ki: ")
-        self.send_command(f"setKi\n{ki}")
-
-    def set_kp(self):
-        kp = input("Kp: ")
-        self.send_command(f"setKp\n{kp}")
-
-    def set_mot(self):
-        mot_pct = input("motPct: ")
-        self.send_command(f"setMot\n{mot_pct}")
-
-    def set_volts(self):
-        set_v = input("setV: ")
-        self.send_command(f"setVolts\n{set_v}")
-
-    def set_load(self):
-        load_val = input("loadVal: ")
-        self.send_command(f"setLoad\n{load_val}")
 
     def read_cmd_message(self, cmd_name):
         if cmd_name not in self.cmds:
