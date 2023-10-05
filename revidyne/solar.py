@@ -1,7 +1,7 @@
 import serial
 from .serialcom import SerialCommander
 import time
-
+from traitlets import HasTraits, observe, Instance, Int
 
 
 inPrompts = {'getAll': ["Kilowatt capacity: ", "Current KW level: ", "Load allocated: ",\
@@ -12,7 +12,12 @@ inPrompts = {'getAll': ["Kilowatt capacity: ", "Current KW level: ", "Load alloc
                'getmax':  ["Panel position with max light level: "], \
                 'getPos': ["Current solar panel position: "] }
 
-class solartracker(SerialCommander):
+class solartracker(HasTraits, SerialCommander):
+    cdeg = Int()
+    ccdeg = Int()
+    load = Int()
+    step=Int()
+    
     def __init__(self, COM, SP):
         self.cmdMenu = {}
         self.cmds = {}
@@ -80,19 +85,21 @@ class solartracker(SerialCommander):
         elif cmd_name == "setKd":
             self.set_kd()
 
-            
-    def moveCW(self, deg):
-        self.send_command(f"moveCW\n{deg}")
-        
-    def moveCCW(self, deg):
-        self.send_command(f"moveCCW\n{deg}")
+    @observe('cdeg')        
+    def moveCW(self, value):
+        self.send_command(f"moveCW\n{self.cdeg}")
 
-    def setLoad(self, ld):
-        self.send_command(f"moveCCW\n{ld}")
+    @observe('ccdeg')            
+    def moveCCW(self, value):
+        self.send_command(f"moveCCW\n{self.ccdeg}")
+
+    @observe('ccdeg')  
+    def setLoad(self, value):
+        self.send_command(f"moveCCW\n{self.load}")
         
-        
-    def setSteps(self, stp):
-        self.send_command(f"setSteps\n{stp}")
+    @observe('step')         
+    def setSteps(self, value):
+        self.send_command(f"setSteps\n{self.step}")
         
     def read_cmd_message(self, cmd_name, returnValue):
         if cmd_name not in self.cmds:
