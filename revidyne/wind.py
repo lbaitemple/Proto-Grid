@@ -19,6 +19,7 @@ class windturbine(HasTraits, SerialCommander):
     ccdeg = Int()
     load = Int()
     range = Int()
+    delay = Int()
     step=Int()
 
     def __init__(self, COM, SP):
