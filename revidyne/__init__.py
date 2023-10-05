@@ -1,4 +1,4 @@
-from .gen import generator
+from .generator import generator
 from .houseload import houseload
 from .solartracker import solartracker
 from .windturbine import windturbine

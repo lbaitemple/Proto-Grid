@@ -1,6 +1,7 @@
 import serial
 from .serialcom import SerialCommander
 import time
+from traitlets import HasTraits, observe, Instance, Int, Float
 
 
 inPrompts = {'getAll': ["Kilowatt capacity: ", "Current KW level: ", "Load allocated: ", \
@@ -11,7 +12,15 @@ inPrompts = {'getAll': ["Kilowatt capacity: ", "Current KW level: ", "Load alloc
              'getKW':         ["KW: "],
               'getCarbon': ["Carbon emission in ton: "]}
 
-class generator(SerialCommander):
+class generator(HasTraits, SerialCommander):
+    Kd = Float()
+    Ki = Float()
+    Kp = Float()
+    Mot = Int()
+    Volts = Int()
+    load = Int()
+
+
     def __init__(self, COM, SP):
         self.cmdMenu = {}
         self.cmds = {}
@@ -76,23 +85,30 @@ class generator(SerialCommander):
         elif cmd_name == "setKd":
             self.set_kd()
 
-    def setKd(self, Kd):
-        self.send_command(f"setKd\n{kd}")
 
-    def setKi(self, Ki):
-        self.send_command(f"setKi\n{ki}")
+    @observe('Kd')
+    def setKd(self, value):
+        self.send_command(f"setKd\n{self.kd}")
 
-    def setKp(self, Kp):
+    @observe('Ki')
+    def setKi(self, value):
+        self.send_command(f"setKi\n{this.ki}")
+
+    @observe('Kp')
+    def setKp(self, value):
         self.send_command(f"setKp\n{kp}")
 
-    def setMot(self, mot_pct):
-        self.send_command(f"setMot\n{mot_pct}")
+    @observe('Mot')
+    def setMot(self, value):
+        self.send_command(f"setMot\n{this.Mot}")
 
-    def setVolts(self, set_v):
-        self.send_command(f"setVolts\n{set_v}")
+    @observe('Volts')
+    def setVolts(self, value):
+        self.send_command(f"setVolts\n{this.Volts}")
 
-    def setLoad(self, load_val):
-        self.send_command(f"setLoad\n{load_val}")
+    @observe('load')
+    def setLoad(self, value):
+        self.send_command(f"setLoad\n{this.load}")
 
     def read_cmd_message(self, cmd_name, returnValue=False):
         if cmd_name not in self.cmds:
