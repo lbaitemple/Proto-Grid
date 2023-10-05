@@ -93,7 +93,7 @@ class solartracker(HasTraits, SerialCommander):
     def moveCCW(self, value):
         self.send_command(f"moveCCW\n{self.ccdeg}")
 
-    @observe('ccdeg')  
+    @observe('load')  
     def setLoad(self, value):
         self.send_command(f"moveCCW\n{self.load}")
         
