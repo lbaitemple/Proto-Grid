@@ -1,6 +1,7 @@
 import serial
 from .serialcom import SerialCommander
 import time
+from traitlets import HasTraits, observe, Instance, Int
 
 
 inPrompts = {'getAll': ["Kilowatt capacity: ", "Current KW level: ", "Load allocated: ",\
@@ -12,7 +13,14 @@ inPrompts = {'getAll': ["Kilowatt capacity: ", "Current KW level: ", "Load alloc
               'getmax':  ["Wind turbine position with max wind speed: "], \
               'getPos':    ["Current wind turbine position: "]}
 
-class windturbine(SerialCommander):
+class windturbine(HasTraits, SerialCommander):
+
+    cdeg = Int()
+    ccdeg = Int()
+    load = Int()
+    range = Int()
+    step=Int()
+
     def __init__(self, COM, SP):
         self.cmdMenu = {}
         self.cmds = {}
@@ -77,23 +85,30 @@ class windturbine(SerialCommander):
         elif cmd_name == "setKd":
             self.set_kd()
 
-    def moveCW(self, deg):
-        self.send_command(f"moveCW\n{deg}")
-        
-    def moveCCW(self, deg):
-        self.send_command(f"moveCCW\n{deg}")
+    @observe('cdeg')        
+    def moveCW(self, value):
+        self.send_command(f"moveCW\n{self.cdeg}")
 
-    def setLoad(self, ld):
-        self.send_command(f"moveCCW\n{ld}")
+    @observe('ccdeg')            
+    def moveCCW(self, value):
+        self.send_command(f"moveCCW\n{self.ccdeg}")
+
+    @observe('load')  
+    def setLoad(self, value):
+        self.send_command(f"moveCCW\n{self.load}")
         
-    def setRange(self, rng):
-        self.send_command(f"setRange\n{rng}")
-        
-    def setDelay(self, delay):
-        self.send_command(f"setDelay\n{delay}")
-        
-    def setSteps(self, stp):
-        self.send_command(f"setSteps\n{stp}")
+    @observe('step')         
+    def setSteps(self, value):
+        self.send_command(f"setSteps\n{self.step}")
+
+    @observe('range') 
+    def setRange(self, value):
+        self.send_command(f"setRange\n{self.range}")
+
+    @observe('delay')     
+    def setDelay(self, value):
+        self.send_command(f"setDelay\n{self.delay}")
+
         
         
     def read_cmd_message(self, cmd_name, returnValue=False):
