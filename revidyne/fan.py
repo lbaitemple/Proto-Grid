@@ -1,6 +1,6 @@
-import serial
 from .serialcom import SerialCommander
 import time
+from traitlets import HasTraits, observe, Instance, Int
 
 
 inPrompts = {'getAll': ["Kilowatt capacity: ", "Current KW level: ", "Load allocated: ", \
@@ -11,13 +11,15 @@ inPrompts = {'getAll': ["Kilowatt capacity: ", "Current KW level: ", "Load alloc
              'getKW':         ["KW: "],
               'getCarbon': ["Carbon emission in ton: "]}
 
-class generator(SerialCommander):
+class fan(HasTraits, SerialCommander):
+    fanspeed = Int(0)
+    
     def __init__(self, COM, SP):
         self.cmdMenu = {}
         self.cmds = {}
         self.port = COM
         self.baud_rate = SP
-        super(generator, self).connect()
+        super(fan, self).connect()
         time.sleep(2)
         self.set_up_cmds()
 
@@ -26,12 +28,12 @@ class generator(SerialCommander):
         #self.send_command("getCommands")
         #cmd_name = self.read_response()
 
-        super(generator, self).send_command("getCommands")
-        cmd_name = super(generator, self).read_response()
+        super(fan, self).send_command("getCommands")
+        cmd_name = super(fan, self).read_response()
         
         while cmd_name != "eoc":
-            super(generator, self).send_command(cmd_name)
-            cmd_name = super(generator, self).read_response()
+            super(fan, self).send_command(cmd_name)
+            cmd_name = super(fan, self).read_response()
             print(cmd_name)
             num_of_output = 0
             num_of_input = 0
@@ -52,7 +54,7 @@ class generator(SerialCommander):
             self.cmds[cmd_name] = curr_cmd         
           
 
-    def call(self, cmd_name, returnValue=False):
+    def call(self, cmd_name):
         if cmd_name not in self.cmds:
             print(f"ERROR: '{cmd_name}' is not in cmd menu")
             return
@@ -62,45 +64,17 @@ class generator(SerialCommander):
         if curr_cmd.in_arg == 0 and curr_cmd.out_arg == 0:
             self.send_command(cmd_name)
         elif curr_cmd.in_arg != 0:
-            return self.read_cmd_message(cmd_name, returnValue)
-        elif cmd_name == "setLoad":
-            self.set_load()
-        elif cmd_name == "setVolts":
-            self.set_volts()
-        elif cmd_name == "setMot":
-            self.set_mot()
-        elif cmd_name == "setKp":
-            self.set_kp()
-        elif cmd_name == "setKi":
-            self.set_ki()
-        elif cmd_name == "setKd":
-            self.set_kd()
+            self.read_cmd_message(cmd_name)
+        elif cmd_name == "setSpeed":
+            self.setSpeed()
 
-    def set_kd(self):
-        kd = input("Kd: ")
-        self.send_command(f"setKd\n{kd}")
 
-    def set_ki(self):
-        ki = input("Ki: ")
-        self.send_command(f"setKi\n{ki}")
+    @observe('fanspeed')
+    def setSpeed(self, value):
+        self.send_command(f"setSpeed\n{self.fanspeed}")
 
-    def set_kp(self):
-        kp = input("Kp: ")
-        self.send_command(f"setKp\n{kp}")
 
-    def set_mot(self):
-        mot_pct = input("motPct: ")
-        self.send_command(f"setMot\n{mot_pct}")
-
-    def set_volts(self):
-        set_v = input("setV: ")
-        self.send_command(f"setVolts\n{set_v}")
-
-    def set_load(self):
-        load_val = input("loadVal: ")
-        self.send_command(f"setLoad\n{load_val}")
-
-    def read_cmd_message(self, cmd_name, returnValue=False):
+    def read_cmd_message(self, cmd_name):
         if cmd_name not in self.cmds:
             print(f"ERROR: '{cmd_name}' is not in cmd menu")
             return
@@ -109,14 +83,10 @@ class generator(SerialCommander):
         self.send_command(cmd_name)
         time.sleep(0.1)  # Wait for response to be received
         cnt=0
-        data=[]
         for _ in range(count):
             response = self.read_response()
-            if (returnValue==False):
-              print(inPrompts[cmd_name][cnt], response)
-            data[cnt]=response
+            print(inPrompts[cmd_name][cnt], response)
             cnt=cnt+1
-        return data
 
 class Cmd:
     def __init__(self, name, in_arg, out_arg):
