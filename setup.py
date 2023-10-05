@@ -1,9 +1,9 @@
 from setuptools import setup
 
 setup(
-    name='revdyn',
+    name='revidyne',
     version='0.0.1',
-    packages=['revdyn'],
+    packages=['revidyne'],
     url='',
     license='',
     author='Li Bai',
