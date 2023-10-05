@@ -1,5 +1,6 @@
 from .serialcom import SerialCommander
 import time
+from traitlets import HasTraits, observe, Instance, Int
 
 
 inPrompts = {'getAll': ["Kilowatt capacity: ", "Current KW level: ", "Load allocated: ", \
@@ -10,7 +11,9 @@ inPrompts = {'getAll': ["Kilowatt capacity: ", "Current KW level: ", "Load alloc
              'getKW':         ["KW: "],
               'getCarbon': ["Carbon emission in ton: "]}
 
-class fan(SerialCommander):
+class fan(HasTraits, SerialCommander):
+    fanspeed = Int(0)
+    
     def __init__(self, COM, SP):
         self.cmdMenu = {}
         self.cmds = {}
@@ -66,8 +69,9 @@ class fan(SerialCommander):
             self.setSpeed()
 
 
-    def setSpeed(self, spd=0):
-        self.send_command(f"setSpeed\n{spd}")
+    @observe('fanspeed')
+    def setSpeed(self, value):
+        self.send_command(f"setSpeed\n{self.fanspeed}")
 
 
     def read_cmd_message(self, cmd_name):
