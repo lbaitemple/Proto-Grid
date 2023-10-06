@@ -92,23 +92,23 @@ class generator(HasTraits, SerialCommander):
 
     @observe('Ki')
     def setKi(self, value):
-        self.send_command(f"setKi\n{this.ki}")
+        self.send_command(f"setKi\n{self.ki}")
 
     @observe('Kp')
     def setKp(self, value):
-        self.send_command(f"setKp\n{kp}")
+        self.send_command(f"setKp\n{self.kp}")
 
     @observe('Mot')
     def setMot(self, value):
-        self.send_command(f"setMot\n{this.Mot}")
+        self.send_command(f"setMot\n{self.Mot}")
 
     @observe('Volts')
     def setVolts(self, value):
-        self.send_command(f"setVolts\n{this.Volts}")
+        self.send_command(f"setVolts\n{self.Volts}")
 
     @observe('load')
     def setLoad(self, value):
-        self.send_command(f"setLoad\n{this.load}")
+        self.send_command(f"setLoad\n{self.load}")
 
     def read_cmd_message(self, cmd_name, returnValue=False):
         if cmd_name not in self.cmds:
