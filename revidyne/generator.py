@@ -146,7 +146,7 @@ class generator(HasTraits, SerialCommander):
         self.send_command(cmd_name)
         time.sleep(0.1)  # Wait for response to be received
         cnt=0
-        data=[]
+        data=[None] *count
         for _ in range(count):
             response = self.read_response()
             if (returnValue==False):
