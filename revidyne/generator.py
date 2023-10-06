@@ -87,28 +87,55 @@ class generator(HasTraits, SerialCommander):
 
 
     @observe('Kd')
-    def setKd(self, value):
-        self.send_command(f"setKd\n{self.kd}")
+    def setkd(self, value):
+        self.send_command(f"setKd\n{self.Kd}")
+
+    def setKd(self, kd):
+        self.send_command(f"setKd\n{kd}")
+
 
     @observe('Ki')
-    def setKi(self, value):
-        self.send_command(f"setKi\n{self.ki}")
+    def setki(self, value):
+        self.send_command(f"setKi\n{self.Ki}")
+
+    def setKi(self, ki):
+        self.send_command(f"setKi\n{ki}")
+        self.Ki = ki
+
 
     @observe('Kp')
-    def setKp(self, value):
-        self.send_command(f"setKp\n{self.kp}")
+    def setkp(self, value):
+        self.send_command(f"setKp\n{self.Kp}")
+
+    def setKp(self, kp):
+        self.send_command(f"setKp\n{kp}")
+        self.Kp = kp
+
 
     @observe('Mot')
-    def setMot(self, value):
+    def setmot(self, value):
         self.send_command(f"setMot\n{self.Mot}")
 
+    def setMot(self, mot):
+        self.send_command(f"setMot\n{mot}")
+        self.Mot = mot
+
     @observe('Volts')
-    def setVolts(self, value):
+    def setvolts(self, value):
         self.send_command(f"setVolts\n{self.Volts}")
+
+    def setVolts(self, volts):
+        self.send_command(f"setVolts\n{volts}")
+        self.Volts = volts
+
 
     @observe('load')
     def setLoad(self, value):
         self.send_command(f"setLoad\n{self.load}")
+
+    def setLoad(self, ld):
+        self.send_command(f"setLoad\n{ld}")
+        self.load = ld
 
     def read_cmd_message(self, cmd_name, returnValue=False):
         if cmd_name not in self.cmds:

@@ -81,7 +81,14 @@ class houseload(HasTraits, SerialCommander):
             self.set_kd()
 
     @observe('h1', 'h2', 'h3', 'h4')
-    def setLimits(self, value):
+    def setlimits(self, value):
+        self.send_command(f"setLimits\n{self.h1}\n{self.h2}\n{self.h3}\n{self.h4}")
+
+    def setLimits(self, h1, h2, h3, h4):
+        self.h1 = h1
+        self.h2 = h2
+        self.h3 = h3
+        self.h4 = h4
         self.send_command(f"setLimits\n{self.h1}\n{self.h2}\n{self.h3}\n{self.h4}")
 
 

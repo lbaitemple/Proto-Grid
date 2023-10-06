@@ -86,21 +86,37 @@ class solartracker(HasTraits, SerialCommander):
             self.set_kd()
 
     @observe('cdeg')        
-    def moveCW(self, value):
+    def movecw(self, value):
         self.send_command(f"moveCW\n{self.cdeg}")
 
     @observe('ccdeg')            
-    def moveCCW(self, value):
+    def moveccw(self, value):
         self.send_command(f"moveCCW\n{self.ccdeg}")
 
     @observe('load')  
-    def setLoad(self, value):
+    def setload(self, value):
         self.send_command(f"moveCCW\n{self.load}")
         
     @observe('step')         
-    def setSteps(self, value):
+    def setsteps(self, value):
         self.send_command(f"setSteps\n{self.step}")
+
+    def moveCW(self, cdeg):
+        self.cdeg = cdeg
+        self.send_command(f"moveCW\n{self.cdeg}")
+
+    def moveCCW(self, ccdeg):
+        self.ccdeg = ccdeg
+        self.send_command(f"moveCCW\n{self.ccdeg}")
+
+    def setLoad(self, load):
+        self.load = load
+        self.send_command(f"moveCCW\n{self.load}")
         
+    def setSteps(self, step):
+        self.step = step
+        self.send_command(f"setSteps\n{self.step}")
+
     def read_cmd_message(self, cmd_name, returnValue):
         if cmd_name not in self.cmds:
             print(f"ERROR: '{cmd_name}' is not in cmd menu")

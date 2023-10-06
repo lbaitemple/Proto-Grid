@@ -86,19 +86,19 @@ class windturbine(HasTraits, SerialCommander):
             self.set_kd()
 
     @observe('cdeg')        
-    def moveCW(self, value):
+    def movecw(self, value):
         self.send_command(f"moveCW\n{self.cdeg}")
 
     @observe('ccdeg')            
-    def moveCCW(self, value):
+    def moveccw(self, value):
         self.send_command(f"moveCCW\n{self.ccdeg}")
 
     @observe('load')  
-    def setLoad(self, value):
+    def setload(self, value):
         self.send_command(f"moveCCW\n{self.load}")
         
     @observe('step')         
-    def setSteps(self, value):
+    def setsteps(self, value):
         self.send_command(f"setSteps\n{self.step}")
 
     @observe('range') 
@@ -109,7 +109,29 @@ class windturbine(HasTraits, SerialCommander):
     def setDelay(self, value):
         self.send_command(f"setDelay\n{self.delay}")
 
+    def moveCW(self, cdeg):
+        self.cdeg = cdeg
+        self.send_command(f"moveCW\n{self.cdeg}")
+
+    def moveCCW(self, ccdeg):
+        self.ccdeg = ccdeg
+        self.send_command(f"moveCCW\n{self.ccdeg}")
+
+    def setLoad(self, load):
+        self.load = load
+        self.send_command(f"moveCCW\n{self.load}")
         
+    def setSteps(self, step):
+        self.step = step
+        self.send_command(f"setSteps\n{self.step}")
+
+    def setRange(self, range):
+        self.range = range
+        self.send_command(f"setRange\n{self.range}")
+
+    def setDelay(self, delay):
+        self.delay = delay
+        self.send_command(f"setDelay\n{self.delay}")    
         
     def read_cmd_message(self, cmd_name, returnValue=False):
         if cmd_name not in self.cmds:

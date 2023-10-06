@@ -70,8 +70,12 @@ class fan(HasTraits, SerialCommander):
 
 
     @observe('fanspeed')
-    def setSpeed(self, value):
+    def setspeed(self, value):
         self.send_command(f"setSpeed\n{self.fanspeed}")
+
+    def setSpeed(self,  spd):
+        self.fanspeed = spd
+        self.send_command(f"setSpeed\n{spd}")
 
 
     def read_cmd_message(self, cmd_name):
