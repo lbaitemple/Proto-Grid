@@ -29,7 +29,7 @@ class fan(HasTraits, SerialCommander):
         #cmd_name = self.read_response()
 
         super(fan, self).send_command("getCommands")
-        cmd_name = super(fan, self).read_response()
+        cmd_name = ""
         
         while cmd_name != "eoc":
             super(fan, self).send_command(cmd_name)
