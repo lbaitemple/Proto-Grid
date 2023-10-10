@@ -40,7 +40,7 @@ class generator(HasTraits, SerialCommander):
         #cmd_name = self.read_response()
 
         super(generator, self).send_command("getCommands")
-        cmd_name = super(generator, self).read_response()
+        cmd_name = ""
         
         while cmd_name != "eoc":
             super(generator, self).send_command(cmd_name)
