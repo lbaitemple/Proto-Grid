@@ -36,7 +36,7 @@ class windturbine(HasTraits, SerialCommander):
         #cmd_name = self.read_response()
 
         super(windturbine, self).send_command("getCommands")
-        cmd_name = super(windturbine, self).read_response()
+        cmd_name = ""
         
         while cmd_name != "eoc":
             super(windturbine, self).send_command(cmd_name)
