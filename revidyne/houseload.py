@@ -31,7 +31,7 @@ class houseload(HasTraits, SerialCommander):
         #cmd_name = self.read_response()
 
         super(houseload, self).send_command("getCommands")
-        cmd_name = super(houseload, self).read_response()
+        cmd_name = ""
         
         while cmd_name != "eoc":
             super(houseload, self).send_command(cmd_name)
