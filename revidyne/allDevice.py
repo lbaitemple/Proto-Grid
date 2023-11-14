@@ -8,6 +8,7 @@ class AllDevice:
 
   def __init__(self, spd=9600):
     self.devices={}
+    self.spd = spd
     enmu_ports = enumerate(list_ports.comports())
     port = []
     for n, (p, descriptor, hid) in enmu_ports:
@@ -17,14 +18,14 @@ class AllDevice:
             port.append(p)
 
     for m in port:
-        serial_commander = SerialCommander(m, spd)  # Replace with your serial port and baud rate
+        serial_commander = SerialCommander(m, self.spd)  # Replace with your serial port and baud rate
         serial_commander.connect()
         time.sleep(2)
         serial_commander.send_command("*ID?")
         response = serial_commander.read_response()
         print(response)
 
-        self.devices[response]=Device(response, port=m, spd=spd)            
+        self.devices[response]=Device(response, port=m, spd=self.spd)            
 
   def getAllDevice(self):
     return self.devices
