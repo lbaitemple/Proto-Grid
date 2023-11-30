@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='revidyne',
-    version='0.0.1',
+    version='0.0.5',
     packages=['revidyne'],
     url='',
     license='',
