@@ -31,7 +31,7 @@ def getCount(lst, pat):
     
 class AllDevice:
 
-  def __init__(self, spd=9600):
+  def __init__(self, spd=115200):
     self.devicenames=[]
     self.devices={}
     self.spd = spd
@@ -60,7 +60,7 @@ class AllDevice:
 
 
 class Device:
-  def __init__(self, name, port, spd=9600):
+  def __init__(self, name, port, spd=115200):
       self.port = port
       self.name = name
       print(name)
