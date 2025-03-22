@@ -2,6 +2,20 @@ from .serialcom import SerialCommander
 import time
 from traitlets import HasTraits, observe, Instance, Int
 
+import re
+
+def parse_command(cmd_name):
+    # Match command name, optional >number, optional <number
+    match = re.match(r'([a-zA-Z_]+)(?:>(\d+))?(?:<(\d+))?', cmd_name)
+    
+    if match:
+        command = match.group(1)  # Extract command name
+        num_of_output = int(match.group(2)) if match.group(2) else 0  # Extract output count or default to 0
+        num_of_input = int(match.group(3)) if match.group(3) else 0  # Extract input count or default to 0
+        return command, num_of_output, num_of_input
+
+    return cmd_name, 0, 0  # Default case: No symbols found
+
 
 inPrompts = {'getAll': ["Kilowatt capacity: ", "Current KW level: ", "Load allocated: ", \
                         "Difference between allocated and used KW: ", "Carbon value: ",  \
@@ -40,18 +54,10 @@ class fan(HasTraits, SerialCommander):
             special_index = -1  
             # Index of the first special char: ">" means cmd needs input, "<" means cmd has output
 
-            if ">" in cmd_name:
-                special_index = cmd_name.index(">")
-                num_of_output = int(cmd_name[special_index + 1:])
-            if "<" in cmd_name:
-                special_index = cmd_name.index("<")
-                num_of_input = int(cmd_name[special_index + 1:])
+            curr_cmd, num_of_input, num_of_output =parse_command(cmd_name)
 
-            if special_index != -1:
-                cmd_name = cmd_name[:special_index]
-
-            curr_cmd = Cmd(cmd_name, num_of_input, num_of_output)
-            self.cmds[cmd_name] = curr_cmd         
+            curr_command = Cmd(curr_cmd, num_of_input, num_of_output)
+            self.cmds[curr_cmd] = curr_command       
           
 
     def call(self, cmd_name):
@@ -65,6 +71,8 @@ class fan(HasTraits, SerialCommander):
             self.send_command(cmd_name)
         elif curr_cmd.in_arg != 0:
             self.read_cmd_message(cmd_name)
+        elif curr_cmd.out_arg != 0:
+            return self.read_cmd_message(cmd_name, True)          
         elif cmd_name == "setSpeed":
             self.setSpeed()
 
@@ -83,7 +91,7 @@ class fan(HasTraits, SerialCommander):
             print(f"ERROR: '{cmd_name}' is not in cmd menu")
             return
 
-        count = self.cmds[cmd_name].in_arg
+        count = self.cmds[cmd_name].in_arg+self.cmds[cmd_name].out_arg
         self.send_command(cmd_name)
         time.sleep(0.1)  # Wait for response to be received
         cnt=0
