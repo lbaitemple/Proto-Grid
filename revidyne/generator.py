@@ -79,8 +79,8 @@ class generator(HasTraits, SerialCommander):
 #                cmd_name = cmd_name[:special_index]
             curr_cmd, num_of_input, num_of_output =parse_command(cmd_name)
 
-            curr_cmd = Cmd(curr_cmd, num_of_input, num_of_output)
-            self.cmds[cmd_name] = curr_cmd         
+            curr_command = Cmd(curr_cmd, num_of_input, num_of_output)
+            self.cmds[curr_cmd] = curr_command        
           
 
     def call(self, cmd_name, returnValue=False):
@@ -89,11 +89,14 @@ class generator(HasTraits, SerialCommander):
             return
 
         curr_cmd = self.cmds[cmd_name]
+        print("---{}___{} ".format(curr_cmd, curr_cmd.out_arg))
 
         if curr_cmd.in_arg == 0 and curr_cmd.out_arg == 0:
             self.send_command(cmd_name)
         elif curr_cmd.in_arg != 0:
             return self.read_cmd_message(cmd_name, returnValue)
+        elif curr_cmd.out_arg != 0:
+            return self.read_cmd_message(cmd_name, True)
         elif cmd_name == "setLoad":
             self.set_load()
         elif cmd_name == "setVolts":
@@ -164,7 +167,9 @@ class generator(HasTraits, SerialCommander):
             print(f"ERROR: '{cmd_name}' is not in cmd menu")
             return
 
-        count = self.cmds[cmd_name].in_arg
+
+        # could be an issue if both input and output are added
+        count = self.cmds[cmd_name].in_arg+self.cmds[cmd_name].out_arg
         self.send_command(cmd_name)
         time.sleep(0.1)  # Wait for response to be received
         cnt=0
