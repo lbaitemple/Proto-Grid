@@ -3,6 +3,21 @@ from .serialcom import SerialCommander
 import time
 from traitlets import HasTraits, observe, Instance, Int
 
+import re
+
+def parse_command(cmd_name):
+    # Match command name, optional >number, optional <number
+    match = re.match(r'([a-zA-Z_]+)(?:>(\d+))?(?:<(\d+))?', cmd_name)
+    
+    if match:
+        command = match.group(1)  # Extract command name
+        num_of_output = int(match.group(2)) if match.group(2) else 0  # Extract output count or default to 0
+        num_of_input = int(match.group(3)) if match.group(3) else 0  # Extract input count or default to 0
+        return command, num_of_output, num_of_input
+
+    return cmd_name, 0, 0  # Default case: No symbols found
+
+
 inPrompts = {'getAll': ["Kilowatt capacity: ", "Current KW level: ", "Load allocated: ", \
                         "Difference between allocated and used KW: ", "Carbon value: ",  \
                         "Renewability: ", "Current Power: "] ,
