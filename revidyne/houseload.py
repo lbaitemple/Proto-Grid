@@ -51,7 +51,7 @@ class houseload(HasTraits, SerialCommander):
         while cmd_name != "eoc":
             super(houseload, self).send_command(cmd_name)
             cmd_name = super(houseload, self).read_response()
-            print(cmd_name)
+
             num_of_output = 0
             num_of_input = 0
             special_index = -1  
