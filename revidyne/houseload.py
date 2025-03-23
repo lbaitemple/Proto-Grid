@@ -57,18 +57,10 @@ class houseload(HasTraits, SerialCommander):
             special_index = -1  
             # Index of the first special char: ">" means cmd needs input, "<" means cmd has output
 
-            if ">" in cmd_name:
-                special_index = cmd_name.index(">")
-                num_of_output = int(cmd_name[special_index + 1:])
-            if "<" in cmd_name:
-                special_index = cmd_name.index("<")
-                num_of_input = int(cmd_name[special_index + 1:])
+            curr_cmd, num_of_input, num_of_output =parse_command(cmd_name)
 
-            if special_index != -1:
-                cmd_name = cmd_name[:special_index]
-
-            curr_cmd = Cmd(cmd_name, num_of_input, num_of_output)
-            self.cmds[cmd_name] = curr_cmd         
+            curr_command = Cmd(curr_cmd, num_of_input, num_of_output)
+            self.cmds[curr_cmd] = curr_command         
           
 
     def call(self, cmd_name):
@@ -81,7 +73,9 @@ class houseload(HasTraits, SerialCommander):
         if curr_cmd.in_arg == 0 and curr_cmd.out_arg == 0:
             self.send_command(cmd_name)
         elif curr_cmd.in_arg != 0:
-            self.read_cmd_message(cmd_name)
+            return self.read_cmd_message(cmd_name, returnValue)
+        elif curr_cmd.out_arg != 0:
+            return self.read_cmd_message(cmd_name, True)            
         elif cmd_name == "setLoad":
             self.set_load()
         elif cmd_name == "setVolts":
@@ -112,7 +106,7 @@ class houseload(HasTraits, SerialCommander):
             print(f"ERROR: '{cmd_name}' is not in cmd menu")
             return
 
-        count = self.cmds[cmd_name].in_arg
+        count = self.cmds[cmd_name].in_arg+self.cmds[cmd_name].out_arg
         self.send_command(cmd_name)
         time.sleep(0.1)  # Wait for response to be received
         cnt=0
