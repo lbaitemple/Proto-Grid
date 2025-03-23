@@ -66,8 +66,7 @@ class generator(HasTraits, SerialCommander):
             num_of_input = 0
             special_index = -1  
             # Index of the first special char: ">" means cmd needs input, "<" means cmd has output
-            print(cmd_name)
-            print("----------------")
+
 #            if ">" in cmd_name:
 #                special_index = cmd_name.index(">")
 #                num_of_output = int(cmd_name[special_index + 1:])
@@ -89,7 +88,7 @@ class generator(HasTraits, SerialCommander):
             return
 
         curr_cmd = self.cmds[cmd_name]
-        print("---{}___{} ".format(curr_cmd, curr_cmd.out_arg))
+
 
         if curr_cmd.in_arg == 0 and curr_cmd.out_arg == 0:
             self.send_command(cmd_name)
