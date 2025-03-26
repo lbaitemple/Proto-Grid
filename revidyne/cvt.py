@@ -25,7 +25,7 @@ inPrompts = {'getAll': ["Kilowatt capacity: ", "Current KW level: ", "Load alloc
              'getKW':         ["KW: "],
               'getCarbon': ["Carbon emission in ton: "]}
 
-class fan(HasTraits, SerialCommander):
+class cvt(HasTraits, SerialCommander):
     fanspeed = Int(0)
     
     def __init__(self, COM, SP):
@@ -77,9 +77,6 @@ class fan(HasTraits, SerialCommander):
             self.setSpeed()
 
 
-    @observe('fanspeed')
-    def setspeed(self, value):
-        self.send_command(f"setSpeed\n{self.fanspeed}")
 
     def setSpeed(self,  spd):
         self.fanspeed = spd
