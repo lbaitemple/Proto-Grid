@@ -33,7 +33,7 @@ class cvt(HasTraits, SerialCommander):
         self.cmds = {}
         self.port = COM
         self.baud_rate = SP
-        super(fan, self).connect()
+        super(cvt, self).connect()
         time.sleep(2)
         self.set_up_cmds()
 
@@ -42,12 +42,12 @@ class cvt(HasTraits, SerialCommander):
         #self.send_command("getCommands")
         #cmd_name = self.read_response()
 
-        super(fan, self).send_command("getCommands")
+        super(cvt, self).send_command("getCommands")
         cmd_name = ""
         
         while cmd_name != "eoc":
-            super(fan, self).send_command(cmd_name)
-            cmd_name = super(fan, self).read_response()
+            super(cvt, self).send_command(cmd_name)
+            cmd_name = super(cvt, self).read_response()
             #print(cmd_name)
             num_of_output = 0
             num_of_input = 0
