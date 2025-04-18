@@ -70,7 +70,7 @@ class fan(HasTraits, SerialCommander):
         if curr_cmd.in_arg == 0 and curr_cmd.out_arg == 0:
             self.send_command(cmd_name)
         elif curr_cmd.in_arg != 0:
-            self.read_cmd_message(cmd_name)
+            self.read_cmd_message(cmd_name, True)
         elif curr_cmd.out_arg != 0:
             return self.read_cmd_message(cmd_name, True)          
         elif cmd_name == "setSpeed":
@@ -86,7 +86,7 @@ class fan(HasTraits, SerialCommander):
         self.send_command(f"setSpeed\n{spd}")
 
 
-    def read_cmd_message(self, cmd_name):
+    def read_cmd_message(self, cmd_name, returnValue=False):
         if cmd_name not in self.cmds:
             print(f"ERROR: '{cmd_name}' is not in cmd menu")
             return
@@ -99,6 +99,9 @@ class fan(HasTraits, SerialCommander):
             response = self.read_response()
             print(inPrompts[cmd_name][cnt], response)
             cnt=cnt+1
+
+    def list_cmds(self):
+        return self.cmds
 
 class Cmd:
     def __init__(self, name, in_arg, out_arg):

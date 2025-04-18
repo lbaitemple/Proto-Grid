@@ -11,6 +11,18 @@ class SerialCommander:
         try:
             self.serial_connection = serial.Serial(self.port, self.baud_rate, timeout=2)
            # print(f"super Connected to {self.port} at {self.baud_rate} baud rate.")
+            time.sleep(0.1)
+            self.serial_connection.parity  = 'N'
+            self.serial_connection.stopbits = 1
+            self.serial_connection.write_timeout = 1 
+            self.serial_connection.dsrdtr = True
+            self.serial_connection.rtscts = True
+            time.sleep(0.1)
+            self.serial_connection.dsrdtr = False
+            self.serial_connection.rtscts = False
+            self.serial_connection.reset_input_buffer()
+            self.serial_connection.reset_output_buffer()
+            
         except serial.SerialException as e:
             print(f"Error: {e}")
 
