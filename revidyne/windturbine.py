@@ -158,6 +158,9 @@ class windturbine(HasTraits, SerialCommander):
             data.append(response)
         return data
 
+    def list_cmds(self):
+        return self.cmds
+
 class Cmd:
     def __init__(self, name, in_arg, out_arg):
         self.name = name

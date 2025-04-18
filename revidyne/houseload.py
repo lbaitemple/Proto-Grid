@@ -7,8 +7,8 @@ import re
 
 def parse_command(cmd_name):
     # Match command name, optional >number, optional <number
-    match = re.match(r'([a-zA-Z_]+)(?:>(\d+))?(?:<(\d+))?', cmd_name)
-    
+    match = re.match(r'([a-zA-Z0-9_]+)(?:>(\d+))?(?:<(\d+))?', cmd_name)
+
     if match:
         command = match.group(1)  # Extract command name
         num_of_output = int(match.group(2)) if match.group(2) else 0  # Extract output count or default to 0
@@ -101,7 +101,7 @@ class houseload(HasTraits, SerialCommander):
         self.send_command(f"setLimits\n{self.h1}\n{self.h2}\n{self.h3}\n{self.h4}")
 
 
-    def read_cmd_message(self, cmd_name):
+    def read_cmd_message(self, cmd_name, returnValue=False):
         if cmd_name not in self.cmds:
             print(f"ERROR: '{cmd_name}' is not in cmd menu")
             return
@@ -114,6 +114,9 @@ class houseload(HasTraits, SerialCommander):
             response = self.read_response()
             print(inPrompts[cmd_name][cnt], response)
             cnt=cnt+1
+
+    def list_cmds(self):
+        return self.cmds
 
 class Cmd:
     def __init__(self, name, in_arg, out_arg):
