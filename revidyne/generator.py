@@ -79,7 +79,11 @@ class generator(HasTraits, SerialCommander):
             curr_cmd, num_of_input, num_of_output =parse_command(cmd_name)
 
             curr_command = Cmd(curr_cmd, num_of_input, num_of_output)
-            self.cmds[curr_cmd] = curr_command        
+            self.cmds[curr_cmd] = curr_command 
+            
+        curr_cmd = "getFreq"
+        curr_command = Cmd(curr_cmd, 0, 1)
+        self.cmds[curr_cmd] = curr_command  
           
 
     def call(self, cmd_name, returnValue=False):
